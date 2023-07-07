@@ -9,6 +9,7 @@ import {Request, Response} from "express";
 import bcrypt from "bcryptjs";
 import {User} from "../db/models/user.model";
 import {Role} from "../db/models/role.model";
+import {UserRepository} from "../repositories/userRepository/UserRepository";
 
 export const singInValidation: (ValidationChain | ((req, res, next) => any))[] = [
     body("email").optional().isEmail().withMessage("Provide valid email"),
@@ -26,7 +27,8 @@ export const singInValidation: (ValidationChain | ((req, res, next) => any))[] =
                 errors: errors.array(),
             });
         }
-        await User.findOne({where: {email: req.body.email}, include: Role}).then((user => {
+        let user_repo:UserRepository = await new UserRepository()
+        await user_repo.find({where: {email: req.body.email}, include: Role}).then((user) => {
             if (!user) return res.status(404).send({message: "User not found."})
             if (user.status === 'pending') return res.status(403).send({message: "Please confirm your email."})
             let passwordIsValid = bcrypt.compareSync(
@@ -34,7 +36,7 @@ export const singInValidation: (ValidationChain | ((req, res, next) => any))[] =
                 user.password
             )
             if (!passwordIsValid) return res.status(401).send({accessTokeN: null, message: "Invalid password.."})
-        }))
+        })
         next()
     }
 ]

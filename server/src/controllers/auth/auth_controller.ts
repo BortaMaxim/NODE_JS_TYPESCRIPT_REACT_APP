@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {Auth_service} from "../../services/auth/auth_service";
 import {User} from "../../db/models/user.model";
 import {MailService} from "../../services/nodemailer/mailServices";
-import {generateJWT} from "../../utils";
+import {Jwt_auth_service} from "../../services/jwt/Jwt_auth_service";
 
 export class Auth_controller {
     auth_service: Auth_service
@@ -62,10 +62,10 @@ export class Auth_controller {
             next(err)
         }
     }
-    sign_in = async (req: Request, res: Response, next:NextFunction) => {
+    sign_in = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            let user:User = await this.auth_service.sign_in(req.body)
-            let token: string = generateJWT({email: req.body.email})
+            let user: User = await this.auth_service.sign_in(req.body)
+            let token: string = await Jwt_auth_service.generateJwt({email: req.body.email})
             await res.status(200).json({
                 success: true,
                 data: user,

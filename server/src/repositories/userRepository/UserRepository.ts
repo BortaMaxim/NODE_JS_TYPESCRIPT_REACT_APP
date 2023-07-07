@@ -6,7 +6,6 @@ export class UserRepository {
     }
 
     async find(condition: any): Promise<User> {
-        console.log('Hello ')
         return await User.findOne(condition)
     }
 }
