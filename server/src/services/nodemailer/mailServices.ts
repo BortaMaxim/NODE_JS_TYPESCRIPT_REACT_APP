@@ -1,7 +1,5 @@
 import nodemailer from 'nodemailer'
 import config from '../../config/envConfig'
-import {IMail} from "../../interfaces/mail/IMail";
-import {Logging} from "../../library/Logging";
 
 export class MailService {
     private static instance: MailService
@@ -43,29 +41,6 @@ export class MailService {
             // }
         })
     }
-    // async sendMail(
-    //     requestId :string | number | string[],
-    //     options: IMail
-    // ) {
-    //     await this.transporter.sendMail({
-    //         from: `"${config.SMTP_SENDER || options.from}"`,
-    //         to: options.to,
-    //         cc: options.cc,
-    //         bcc: options.bcc,
-    //         subject: options.subject,
-    //         text: options.text,
-    //         html: options.html
-    //     }).then(info => {
-    //         Logging.info(`${requestId} - Mail sent success!`)
-    //         Logging.info(`${requestId} - [MailResponse]=${info.response} [MessageID]=${info.messageId}`)
-    //         if (process.env.NODE_ENV === 'local') {
-    //             Logging.info(`${requestId} - Nodemailer ethereal URL: ${nodemailer.getTestMessageUrl(
-    //                 info
-    //             )}`)
-    //         }
-    //         return info
-    //     })
-    // }
     async verifyConnection() {
         return await this.transporter.verify()
     }

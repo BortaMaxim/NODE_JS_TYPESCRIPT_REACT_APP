@@ -13,11 +13,12 @@ export class Auth_service {
         this.userRepository = new UserRepository()
     }
 
-    async sign_up(data) {
+    async sign_up(data):Promise<void> {
         const token: string = Jwt_auth_service.generateJwt(
             {
                 email: data.email
-            }
+            },
+            '1h'
         )
         let userData: IUser = {
             name: data.name,

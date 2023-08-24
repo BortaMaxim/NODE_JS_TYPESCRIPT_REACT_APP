@@ -12,21 +12,26 @@ export class Auth_controller {
         this.auth_service = new Auth_service()
     }
 
-    sign_up = async (req: Request, res: Response) => {
+    sign_up = (req: Request, res: Response) => {
+        this.auth_service.sign_up(req.body)
+        res.status(200).json({
+            success: true,
+            message: "User was registered successfully! Please check your email"
+        })
+    }
+    sign_in = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await this.auth_service.sign_up(req.body)
-            res.status(200).json({
+            let user: User = await this.auth_service.sign_in(req.body)
+            let token: string = Jwt_auth_service.generateJwt({email: req.body.email}, '1h')
+            await res.status(200).json({
                 success: true,
-                message: "User was registered successfully! Please check your email"
+                data: user,
+                token: token
             })
         } catch (err) {
-            res.status(500).send({message: err})
-            res.send({
-                message: "User was registered successfully! Please check your email",
-            })
+            next(err)
         }
     }
-
     verify_user = async (req: Request, res: Response, next: NextFunction) => {
         try {
             await this.auth_service.email_verify(req.params.confirmedCode).then(user => {
@@ -35,7 +40,7 @@ export class Auth_controller {
                 }
                 user.status = 'active'
                 user.save()
-                res.json({
+                res.status(200).json({
                     success: true,
                     message: `User confirmed success.`,
                     redirect: '/confirmed-success'
@@ -51,25 +56,12 @@ export class Auth_controller {
                 if (!user) {
                     return res.status(404).send({message: this.message});
                 }
-                const nodemailer = MailService.getInstance()
+                const nodemailer: MailService = MailService.getInstance()
                 await nodemailer.sendConfirmationEmail(user.name, user.email, user.confirmedCode)
                 await res.json({
                     success: true,
                     message: "Resend success."
                 })
-            })
-        } catch (err) {
-            next(err)
-        }
-    }
-    sign_in = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            let user: User = await this.auth_service.sign_in(req.body)
-            let token: string = await Jwt_auth_service.generateJwt({email: req.body.email})
-            await res.status(200).json({
-                success: true,
-                data: user,
-                token: token
             })
         } catch (err) {
             next(err)

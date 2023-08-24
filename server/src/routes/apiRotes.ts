@@ -10,4 +10,4 @@ apiRouter.use('/api', group((router:Router):void => {
     router.use('/profile', profileRoutes)
 }))
 
-module.exports = apiRouter
+export default apiRouter

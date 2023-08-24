@@ -7,8 +7,8 @@ const router:Router = express.Router()
 const auth_controller: Auth_controller = new Auth_controller()
 
 router.post('/register', singUpValidation, auth_controller.sign_up)
+router.post('/login', singInValidation, auth_controller.sign_in)
 router.get('/confirm/:confirmedCode', auth_controller.verify_user)
 router.post('/resend-email', auth_controller.resend_email)
-router.post('/login', singInValidation, auth_controller.sign_in)
 
 module.exports = router

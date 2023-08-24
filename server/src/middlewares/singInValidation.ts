@@ -1,13 +1,15 @@
 import {
     AlternativeValidationError,
-    body, FieldValidationError,
+    body,
+    FieldValidationError,
     GroupedAlternativeValidationError,
-    Result, UnknownFieldsError,
-    ValidationChain, validationResult
+    Result,
+    UnknownFieldsError,
+    ValidationChain,
+    validationResult
 } from "express-validator";
 import {Request, Response} from "express";
 import bcrypt from "bcryptjs";
-import {User} from "../db/models/user.model";
 import {Role} from "../db/models/role.model";
 import {UserRepository} from "../repositories/userRepository/UserRepository";
 
@@ -19,7 +21,7 @@ export const singInValidation: (ValidationChain | ((req, res, next) => any))[] =
         .withMessage("Password should be string")
         .isLength({min: 6})
         .withMessage("Password should be at least 6 characters"),
-    async (req: Request, res: Response, next) => {
+    async (req: Request, res: Response, next):Promise<Response> => {
         const errors: Result<AlternativeValidationError | GroupedAlternativeValidationError | UnknownFieldsError | FieldValidationError> = await validationResult(req)
         if (!errors.isEmpty()) {
             return res.status(400).json({

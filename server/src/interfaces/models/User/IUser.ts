@@ -6,9 +6,9 @@ export interface IUser {
     email: string,
     password: string,
     status?: any,
-    avatar: string,
+    avatar?: string,
     confirmedCode?: string,
     createdAt?: Date,
     updatedAt?: Date
-    roles: IRole
+    roles?: IRole
 }

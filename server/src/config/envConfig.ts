@@ -1,13 +1,13 @@
-import * as path from 'node:path'
 import * as dotenv from "dotenv";
 import {IENV} from '../types/IENV'
 import {IConfig} from "../types/IConfig";
 
 dotenv.config()
 
-const getConfig = ():IENV => {
+const getConfig = (): IENV => {
     return {
         PORT: process.env.PORT,
+        TEST_PORT: process.env.TEST_PORT,
         DATABASE: process.env.DATABASE,
         USER_NAME: process.env.USER_NAME,
         PASSWORD: process.env.PASSWORD,
@@ -21,12 +21,13 @@ const getConfig = ():IENV => {
         SMTP_PASSWORD: process.env.SMTP_PASSWORD,
         SMTP_SENDER: process.env.SMTP_SENDER,
         SMTP_TLS: process.env.SMTP_TLS,
-        NODE_ENV: process.env.NODE_ENV
+        NODE_ENV: process.env.NODE_ENV,
+        TEST_DATABASE: process.env.TEST_DATABASE
     }
 }
 
 const getSanitizedConfig = (config: IENV): IConfig => {
-    for (const[key, value] of Object.entries(config)) {
+    for (const [key, value] of Object.entries(config)) {
         if (value === undefined) {
             throw new Error(`Missing key ${key} in config.env`)
         }
@@ -35,5 +36,5 @@ const getSanitizedConfig = (config: IENV): IConfig => {
 }
 
 const envConfig: IENV = getConfig()
-const sanitizedConfig:IConfig = getSanitizedConfig(envConfig)
+const sanitizedConfig: IConfig = getSanitizedConfig(envConfig)
 export default sanitizedConfig

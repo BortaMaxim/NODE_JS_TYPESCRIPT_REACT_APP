@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rimraf ./build && tsc",
-    "start:dev": "npx nodemon",
+    "start:dev": "npx nodemon NODE_ENV=prod",
     "start": "npm run build && node build/index.js",
     "lint": "eslint . --ext .ts",
     "prettier-format": "run-script-os",
@@ -17,7 +17,7 @@
     "prettier-watch:darwin:linux": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "prettier-watch:default": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "test": "jest",
-    "test:dev": "jest --watchAll"
+    "test:dev": "jest --watchAll --detectOpenHandles"
   },
   "husky": {
     "hooks": {
@@ -47,6 +47,7 @@
     "prettier": "^2.8.8",
     "rimraf": "^5.0.1",
     "run-script-os": "^1.1.6",
+    "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
@@ -60,6 +61,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
     "express-validator": "^7.0.1",
     "jest-cucumber": "^3.0.1",
     "jsonwebtoken": "^9.0.0",
@@ -69,6 +71,7 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.32.0",
     "sequelize-cli-typescript": "^3.2.0-c",
+    "sequelize-mock": "^0.10.2",
     "sequelize-typescript": "^2.1.5",
     "tsconfig-paths": "^4.2.0"
   }
